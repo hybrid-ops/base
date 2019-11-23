@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ldap
+
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: tls_configmap
+  namespace: ldap
+spec:
+  type: GitHub
+  pathname: https://github.com/hybrid-ops/tls_configmap.git
+
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: github-ldap-subscription
+  namespace: ldap
+spec:
+  channel: ldap/tls_configmap
+  name: tls_configmap
+  placement:
+    multicluster:
+      enabled: true
+      labelSelector:
+        matchLabels:
+          environment: Test
